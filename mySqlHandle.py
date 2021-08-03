@@ -1,17 +1,17 @@
 import mysql.connector as mysql
 from mysql.connector import errorcode
 from datetime import date, datetime, timedelta
-import Pass
+import pass
 
 def connection():
     # enter your server IP address/domain name
     HOST = "remotemysql.com" # or "domain.com"
     # database name, if you want just to connect to MySQL server, leave it empty
-    DATABASE = Pass.database
+    DATABASE = pass.database
     # this is the user you create
-    USER = Pass.username
+    USER = pass.username
     # user password
-    PASSWORD = Pass.password
+    PASSWORD = pass.password
     # connect to MySQL server
     connection.db = mysql.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
     print("Connected to:", connection.db.get_server_info())
@@ -23,7 +23,7 @@ def close():
 
 def createTable():
     connection()
-    DB_NAME = Pass.database
+    DB_NAME = pass.database
 
     TABLES = {}
     TABLES['employees'] = (
