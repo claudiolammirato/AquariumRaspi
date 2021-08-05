@@ -1,5 +1,5 @@
 import tkinter as tk
-import tkinter as ttk
+
 
 def grafica():
     window = tk.Tk()
@@ -11,9 +11,21 @@ def grafica():
 
     #layout
     
+    #bottom frame
+    bottom_frame_dx = tk.Frame(window, highlightbackground="grey", highlightcolor="black", highlightthickness=1, width=512, height=300)
+    bottom_frame_dx.place(x=512, y=300)
+    bottom_frame_sx = tk.Frame(window, highlightbackground="grey", highlightcolor="black", highlightthickness=1, width=512, height=300)
+    bottom_frame_sx.place(x=0, y=300)
+    #top_frame
+    top_frame_dx = tk.Frame(window, highlightbackground="grey", highlightcolor="black", highlightthickness=1, width=512, height=300)
+    top_frame_dx.place(x=512, y=0)
+    top_frame_sx = tk.Frame(window, highlightbackground="grey", highlightcolor="black", highlightthickness=1, width=512, height=300)
+    top_frame_sx.place(x=0, y=0)
 
-    closebutton = tk.Button(window, text="My Button2", command=window.quit)
-    closebutton.grid(row=0, column=1)
+    closebutton = tk.Button(bottom_frame_dx, text="Close App", command=window.quit)
+    closebutton.place(x=400, y=250)
+
+    #closebutton.grid(row=0, column=1)
 
     def quit(self):
         self.root.destroy()
