@@ -1,7 +1,12 @@
 import sys
 import os
+import threading 
 
 from graphic import grafica
+import schedule
+import time
+from dht_aquarium import retrieve_temp_hum
+from sqlite import db_connection, create_table, insert_item, select_from_db
 
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using :0.0')
@@ -9,8 +14,20 @@ if os.environ.get('DISPLAY','') == '':
 
 
 def main():
-    grafica()
-    
+
+    #check if database ok
+        
+    p1 = threading.Thread(target=grafica)
+    p2 = threading.Thread(target=retrieve_temp_hum)
+    p1.start()
+    p2.start()
+
+   
 
 if __name__ == "__main__":
     main()
+
+
+
+
+

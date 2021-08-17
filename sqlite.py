@@ -1,56 +1,62 @@
 #!/usr/bin/python
 
 import sqlite3
+import datetime
+
+def db_connection():
+    try:
+        conn = sqlite3.connect('test_aquarium.db')
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
 
 def create_table():
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect('test_aquarium.db')
     print ("Opened database successfully")
 
-    conn.execute('''CREATE TABLE COMPANY
-            (ID INT PRIMARY KEY     NOT NULL,
-            NAME           TEXT    NOT NULL,
-            AGE            INT     NOT NULL,
-            ADDRESS        CHAR(50),
-            SALARY         REAL);''')
+    conn.execute('''CREATE TABLE SENSORS
+            (ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            TEMP_EXT       REAL    ,
+            HUM_EXT        REAL     ,
+            DATE        TIMESTAMP);''')
     print ("Table created successfully")
     conn.close()
 
-def insert_item():
-    conn = sqlite3.connect('test.db')
-    print ("Opened database successfully")
+def insert_item(t_ext,h_ext):
+    try:
+        conn = sqlite3.connect('test_aquarium.db')
+        print ("Opened database successfully")
 
-    conn.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-        VALUES (1, 'Paul', 32, 'California', 20000.00 )");
+        data_tuple = (t_ext, h_ext, datetime.datetime.now())
+        sqlite_insert_with_param = """INSERT INTO SENSORS (TEMP_EXT,HUM_EXT,DATE) 
+                          VALUES (?, ?, ?);"""
 
-    conn.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-        VALUES (2, 'Allen', 25, 'Texas', 15000.00 )");
 
-    conn.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-        VALUES (3, 'Teddy', 23, 'Norway', 20000.00 )");
+        conn.execute(sqlite_insert_with_param, data_tuple);
 
-    conn.execute("INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-        VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 )");
-
-    conn.commit()
-    print ("Records created successfully")
-    conn.close()
+        conn.commit()
+        print ("Records created successfully")
+        conn.close()
+    except sqlite3.Error as error:
+        print("Error while connecting to sqlite", error)
+        create_table()
 
 def select_from_db():
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect('test_aquarium.db')
     print ("Opened database successfully")
 
-    cursor = conn.execute("SELECT id, name, address, salary from COMPANY")
+    cursor = conn.execute("SELECT id, TEMP_EXT, HUM_EXT, DATE from SENSORS")
     for row in cursor:
-        print ("ID = "), row[0]
-        print ("NAME = "), row[1]
-        print ("ADDRESS = "), row[2]
-        print ("SALARY = "), row[3], "\n"
+        print (datetime.datetime.now())
+        print ("ID = ", row[0])
+        print ("TEMP_EXT = ", row[1])
+        print ("HUM_EXT = ", row[2])
+        print ("DATE = ", row[3], "\n") 
 
     print ("Operation done successfully")
     conn.close()
 
 def update_item():
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect('test_aquarium.db')
     print ("Opened database successfully")
 
     conn.execute("UPDATE COMPANY set SALARY = 25000.00 where ID = 1")
@@ -68,7 +74,7 @@ def update_item():
     conn.close()
 
 def delete_item():
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect('test_aquarium.db')
     print ("Opened database successfully")
 
     conn.execute("DELETE from COMPANY where ID = 2;")
