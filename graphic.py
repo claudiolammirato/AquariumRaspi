@@ -1,6 +1,7 @@
 import tkinter as tk
 from sqlite import select_from_db
 from time import strftime
+from aquarium_camera import CameraON, CameraOFF
 
 def grafica():
 
@@ -16,13 +17,16 @@ def grafica():
         ext_date = rows[len(rows)-1][3][11:16]
         tk.Label(window, text = "External Temperature is: " + ext_temp + "°C @ " +ext_date).place(x = 10, y = 80) 
         tk.Label(window, text = "External Humidity is: " + ext_hum + "% @ "+ext_date).place(x = 10, y = 100) 
-        window.after(600000, sensors_parameters)
+        window.after(290000, sensors_parameters)
     
     #time
     def time():
         string = strftime('%H:%M:%S %p')
         tk.Label(window, text = string).place(x = 920, y = 10) 
         window.after(1000, time)
+
+    
+
 
     window = tk.Tk()
 
@@ -60,6 +64,10 @@ def grafica():
     Label4.place(x=522, y=330)
     Labeltitle = tk.Label(text="Aquarium")
     Labeltitle.place(x=480, y=10)
+
+    #camera
+    tk.Button(window, text='Start Camera', command=CameraON).place(x = 620, y = 280)
+    tk.Button(window, text='Stop Camera', command=CameraOFF).place(x = 790, y = 280)
 
     #closebutton.grid(row=0, column=1)
     

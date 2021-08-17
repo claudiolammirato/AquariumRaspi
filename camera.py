@@ -16,7 +16,7 @@ effects = ['none','negative','solarize','sketch','denoise','emboss','oilpaint','
 
 def CameraON():
     camera.preview_fullscreen=False
-    camera.preview_window=(90,100, 320, 240)
+    camera.preview_window=(200,100, 320, 240)
     camera.resolution=(640,480)
     camera.start_preview()
     
