@@ -21,39 +21,40 @@ def create_table():
     print ("Table created successfully")
     conn.close()
 
-def insert_item(t_ext,h_ext):
+def insert_item(t_ext,h_ext, relevant_table):
     try:
         conn = sqlite3.connect('test_aquarium.db')
-        print ("Opened database successfully")
+        #print ("Opened database successfully")
 
         data_tuple = (t_ext, h_ext, datetime.datetime.now())
-        sqlite_insert_with_param = """INSERT INTO SENSORS (TEMP_EXT,HUM_EXT,DATE) 
-                          VALUES (?, ?, ?);"""
-
+        if (relevant_table=="SENSORS"):
+            sqlite_insert_with_param = """INSERT INTO """ + relevant_table + """ (TEMP_EXT,HUM_EXT,DATE) VALUES (?, ?, ?);"""
 
         conn.execute(sqlite_insert_with_param, data_tuple);
-
         conn.commit()
-        print ("Records created successfully")
+
+        print ("Item Added")
+        #print ("Records created successfully")
         conn.close()
     except sqlite3.Error as error:
         print("Error while connecting to sqlite", error)
-        create_table()
 
 def select_from_db():
     conn = sqlite3.connect('test_aquarium.db')
-    print ("Opened database successfully")
+    #print ("Opened database successfully")
 
     cursor = conn.execute("SELECT id, TEMP_EXT, HUM_EXT, DATE from SENSORS")
-    for row in cursor:
-        print (datetime.datetime.now())
-        print ("ID = ", row[0])
-        print ("TEMP_EXT = ", row[1])
-        print ("HUM_EXT = ", row[2])
-        print ("DATE = ", row[3], "\n") 
+    #for row in cursor:
+        #print (datetime.datetime.now())
+        #print ("ID = ", row[0])
+        #print ("TEMP_EXT = ", row[1])
+        #print ("HUM_EXT = ", row[2])
+        #print ("DATE = ", row[3], "\n") 
 
-    print ("Operation done successfully")
+    #print ("Operation done successfully")
+    rows = cursor.fetchall()
     conn.close()
+    return rows
 
 def update_item():
     conn = sqlite3.connect('test_aquarium.db')

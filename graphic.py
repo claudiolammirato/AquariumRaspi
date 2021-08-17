@@ -1,11 +1,28 @@
 import tkinter as tk
+from sqlite import select_from_db
+from time import strftime
 
 def grafica():
 
     def quit():
         window.destroy()
         
-        
+    #retrieve parameters
+    def sensors_parameters():
+        rows = select_from_db()
+        #print (rows[len(rows)-1])
+        ext_temp = str("{:5.1f}".format(rows[len(rows)-1][1]))
+        ext_hum = str("{:5.1f}".format(rows[len(rows)-1][2]))
+        ext_date = rows[len(rows)-1][3][11:16]
+        tk.Label(window, text = "External Temperature is: " + ext_temp + "°C @ " +ext_date).place(x = 10, y = 80) 
+        tk.Label(window, text = "External Humidity is: " + ext_hum + "% @ "+ext_date).place(x = 10, y = 100) 
+        window.after(600000, sensors_parameters)
+    
+    #time
+    def time():
+        string = strftime('%H:%M:%S %p')
+        tk.Label(window, text = string).place(x = 920, y = 10) 
+        window.after(1000, time)
 
     window = tk.Tk()
 
@@ -52,4 +69,7 @@ def grafica():
     #connectionDBButton = tk.Button(text="Connetti al DB", command=database_connection)
     #connectionDBButton.grid(row=0,column=0)
 
+
+    sensors_parameters()
+    time()
     window.mainloop()
