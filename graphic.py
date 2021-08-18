@@ -44,18 +44,17 @@ def grafica():
         graph_window.geometry("%dx%d+%d+%d" % (window_width, window_height, x, y))
         #retrieve data from sqlite
         data = graph_data_sqlite()
-        print(data)
+        #print(data)
 
         #draw graph 1
         x1 = data.DATE
         x = x1.str.slice(start=11, stop=16, step=1)
         y = data.TEMP_EXT
-        print(x)
 
         px = 1/plt.rcParams['figure.dpi']
         figure1 = plt.Figure(figsize=(500*px, 250*px))
         ax1 = figure1.add_subplot()
-        ax1.set_xticklabels(x, rotation=0, fontsize=8)
+        ax1.tick_params(axis='x', labelsize=8)
         ax1.tick_params(axis='y', labelsize=8)
         ax1.set_ylim([18,35])
         ax1.plot(x,y)
@@ -68,15 +67,14 @@ def grafica():
         #draw graph 2
         x22 = data.DATE
         x2 = x22.str.slice(start=11, stop=16, step=1)
-        y2 = data.TEMP_EXT
-        print(x)
+        y2 = data.HUM_EXT
 
         px2 = 1/plt.rcParams['figure.dpi']
         figure2 = plt.Figure(figsize=(500*px, 250*px))
         ax2 = figure2.add_subplot()
-        ax2.set_xticklabels(x, rotation=0, fontsize=8)
+        ax2.tick_params(axis='x', labelsize=8)
         ax2.tick_params(axis='y', labelsize=8)
-        ax2.set_ylim([18,35])
+        ax2.set_ylim([30,80])
         ax2.plot(x,y)
         
 
@@ -88,12 +86,11 @@ def grafica():
         x33 = data.DATE
         x3 = x33.str.slice(start=11, stop=16, step=1)
         y3 = data.TEMP_EXT
-        print(x)
 
         px3 = 1/plt.rcParams['figure.dpi']
         figure3 = plt.Figure(figsize=(500*px, 250*px))
         ax3 = figure3.add_subplot()
-        ax3.set_xticklabels(x, rotation=0, fontsize=8)
+        ax3.tick_params(axis='x', labelsize=8)
         ax3.tick_params(axis='y', labelsize=8)
         ax3.set_ylim([18,35])
         ax3.plot(x,y)
@@ -107,12 +104,11 @@ def grafica():
         x44 = data.DATE
         x4 = x44.str.slice(start=11, stop=16, step=1)
         y4 = data.TEMP_EXT
-        print(x)
 
         px4 = 1/plt.rcParams['figure.dpi']
         figure4 = plt.Figure(figsize=(500*px, 250*px))
         ax4 = figure4.add_subplot()
-        ax4.set_xticklabels(x, rotation=0, fontsize=8)
+        ax4.tick_params(axis='x', labelsize=8)
         ax4.tick_params(axis='y', labelsize=8)
         ax4.set_ylim([18,35])
         ax4.plot(x,y)
@@ -168,7 +164,7 @@ def grafica():
 
     #Graph Button
 
-    btn = tk.Button(window, text ="Click to open a new window", command = openNewWindow).place(x = 10, y = 280)
+    btn = tk.Button(window, text ="Open Graph", command = openNewWindow).place(x = 10, y = 280)
     
     
         
