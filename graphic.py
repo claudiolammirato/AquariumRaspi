@@ -4,6 +4,7 @@ from time import strftime
 from aquarium_camera import CameraON, CameraOFF
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from send_email import email
 
 def grafica():
 
@@ -117,7 +118,8 @@ def grafica():
         line4 = FigureCanvasTkAgg(figure4, graph_window)
         line4.get_tk_widget().grid(row=1,column=1)
         line4.draw()
-        
+
+
     window = tk.Tk()
 
     #window.wm_attributes('-fullscreen','true')
@@ -165,6 +167,7 @@ def grafica():
     #Graph Button
 
     btn = tk.Button(window, text ="Open Graph", command = openNewWindow).place(x = 10, y = 280)
+    btn1 = tk.Button(window, text ="send email", command = email).place(x = 10, y = 400)
     
     
         
