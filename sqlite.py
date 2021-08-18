@@ -2,6 +2,7 @@
 
 import sqlite3
 import datetime
+import pandas as pd
 
 def db_connection():
     try:
@@ -91,3 +92,10 @@ def delete_item():
 
     print ("Operation done successfully")
     conn.close()
+
+
+def graph_data_sqlite():
+    conn = sqlite3.connect('test_aquarium.db')
+    df = pd.read_sql_query("SELECT id, TEMP_EXT, HUM_EXT, DATE from SENSORS", conn)
+    df= df.tail(10)
+    return df
