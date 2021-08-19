@@ -97,5 +97,7 @@ def delete_item():
 def graph_data_sqlite():
     conn = sqlite3.connect('test_aquarium.db')
     df = pd.read_sql_query("SELECT id, TEMP_EXT, HUM_EXT, DATE from SENSORS", conn)
-    df= df.tail(10)
+
+    #Numero di valori
+    #df= df.tail(15)
     return df

@@ -3,13 +3,19 @@ from sqlite import select_from_db, graph_data_sqlite
 from time import strftime
 from aquarium_camera import CameraON, CameraOFF
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from send_email import email
+from settings import *
 
 def grafica():
 
     def quit():
         window.destroy()
+    
+    #save settings
+    def save_settings():
+        settings_write_email(email_name.get(), email_password.get(), email_port.get())
+        #settings_write_database_mysql(mysqlentry_name.get(), mysqlentry_password.get(), mysqlentry_database.get())
         
     #retrieve parameters
     def sensors_parameters():
@@ -52,18 +58,27 @@ def grafica():
         x = x1.str.slice(start=11, stop=16, step=1)
         y = data.TEMP_EXT
 
+        xtemp1 = len(x)-10
+        ytemp1 = len(y)-10
+
         px = 1/plt.rcParams['figure.dpi']
         figure1 = plt.Figure(figsize=(500*px, 250*px))
         ax1 = figure1.add_subplot()
         ax1.tick_params(axis='x', labelsize=8)
         ax1.tick_params(axis='y', labelsize=8)
         ax1.set_ylim([18,35])
-        ax1.plot(x,y)
+
+        ax1.plot(x[xtemp1:],y[ytemp1:])
+    
         
 
         line1 = FigureCanvasTkAgg(figure1, graph_window)
-        line1.get_tk_widget().grid(row=0,column=0)
+        line1.get_tk_widget().pack()
         line1.draw()
+       
+
+        toolbar = NavigationToolbar2Tk(line1, graph_window)
+        toolbar.update()
 
         #draw graph 2
         x22 = data.DATE
@@ -76,7 +91,7 @@ def grafica():
         ax2.tick_params(axis='x', labelsize=8)
         ax2.tick_params(axis='y', labelsize=8)
         ax2.set_ylim([30,80])
-        ax2.plot(x,y)
+        ax2.plot(x2,y2)
         
 
         line2 = FigureCanvasTkAgg(figure2, graph_window)
@@ -94,7 +109,7 @@ def grafica():
         ax3.tick_params(axis='x', labelsize=8)
         ax3.tick_params(axis='y', labelsize=8)
         ax3.set_ylim([18,35])
-        ax3.plot(x,y)
+        ax3.plot(x3,y3)
         
 
         line3 = FigureCanvasTkAgg(figure3, graph_window)
@@ -112,7 +127,7 @@ def grafica():
         ax4.tick_params(axis='x', labelsize=8)
         ax4.tick_params(axis='y', labelsize=8)
         ax4.set_ylim([18,35])
-        ax4.plot(x,y)
+        ax4.plot(x4,y4)
         
 
         line4 = FigureCanvasTkAgg(figure4, graph_window)
@@ -144,8 +159,7 @@ def grafica():
     top_frame_sx = tk.Frame(window, highlightbackground="grey", highlightcolor="black", highlightthickness=1, width=512, height=280)
     top_frame_sx.place(x=0, y=40)
 
-    closebutton = tk.Button(bottom_frame_dx, text="Close App", command=quit)
-    closebutton.place(x=400, y=230)
+    tk.Button(bottom_frame_dx, text="Close App", command=quit).place(x=400, y=230)
 
     Label1 = tk.Label(text="Parameters")
     Label1.place(x=10, y=50)
@@ -162,18 +176,49 @@ def grafica():
     tk.Button(window, text='Start Camera', command=CameraON).place(x = 620, y = 280)
     tk.Button(window, text='Stop Camera', command=CameraOFF).place(x = 790, y = 280)
 
-    #closebutton.grid(row=0, column=1)
-
     #Graph Button
+    tk.Button(window, text ="Open Graph", command = openNewWindow).place(x = 10, y = 280)
 
-    btn = tk.Button(window, text ="Open Graph", command = openNewWindow).place(x = 10, y = 280)
-    btn1 = tk.Button(window, text ="send email", command = email).place(x = 10, y = 400)
-    
-    
-        
+    #EMAIL
+    tk.Button(window, text ="send email", command = email).place(x = 10, y = 400)
 
-    #connectionDBButton = tk.Button(text="Connetti al DB", command=database_connection)
-    #connectionDBButton.grid(row=0,column=0)
+    #Settings
+
+    #MYSQL
+    tk.Label(text="MYSQL", font='Helvetica 10 bold').place(x=522, y=350)
+    tk.Label(text="username").place(x=522, y=370)
+    tk.Label(text="password").place(x=522, y=390)
+    tk.Label(text="database").place(x=522, y=410)
+    set_mysql = settings_read_database_mysql()
+    name = tk.StringVar(value=set_mysql['username'])
+    password = tk.StringVar(value=set_mysql['password'])
+    database = tk.StringVar(value=set_mysql['database'])
+    mysqlentry_name = tk.Entry(window, width = 15, textvariable=name)
+    mysqlentry_name.place(x=600, y=370)
+    mysqlentry_password = tk.Entry(window, width = 15, show="*", textvariable=password)
+    mysqlentry_password.place(x=600, y=390)
+    mysqlentry_database = tk.Entry(window, width = 15, textvariable=database)
+    mysqlentry_database.place(x=600, y=410)
+    
+
+    #EMAIL
+    tk.Label(text="EMAIL", font='Helvetica 10 bold').place(x=522, y=430)
+    tk.Label(text="username").place(x=522, y=450)
+    tk.Label(text="password").place(x=522, y=470) 
+    tk.Label(text="port").place(x=522, y=490)
+    set_email = settings_read_email()
+    e_name = tk.StringVar(value=set_email['username'])
+    e_password = tk.StringVar(value=set_email['password'])
+    e_port = tk.StringVar(value=set_email['port'])
+    email_name = tk.Entry(window, width = 15, textvariable=e_name)
+    email_name.place(x=600, y=450)
+    email_password = tk.Entry(window, width = 15, show="*", textvariable=e_password)
+    email_password.place(x=600, y=470)
+    email_port = tk.Entry(window, width = 15, textvariable=e_port)
+    email_port.place(x=600, y=490)
+
+    tk.Button(bottom_frame_dx, text="Save", command=save_settings).place(x=200, y=230)
+
 
 
     sensors_parameters()
