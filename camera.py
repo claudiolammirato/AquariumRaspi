@@ -18,6 +18,7 @@ def CameraON():
     camera.preview_fullscreen=False
     camera.preview_window=(200,100, 320, 240)
     camera.resolution=(640,480)
+    camera.rotation = 0
     camera.start_preview()
     
 def CameraOFF():
